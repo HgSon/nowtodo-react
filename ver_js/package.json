@@ -1,0 +1,21 @@
+{
+  "name": "todolist",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/HgSon/nowtodo.git",
+  "author": "hg <hgson.8@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "json-server": "^0.16.1",
+    "mongoose": "^5.10.2"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "json-server --watch db.json --middlewares ./header.js"
+  }
+}
