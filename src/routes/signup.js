@@ -1,5 +1,5 @@
 import React from "react";
-import Buttons from "../components/buttons";
+import { LinkBtns } from "../components/buttons";
 import routes from "../routes";
 // 아이디 겹치는경우, 비밀번호 일치하지 않는 경우 label hidden false,  메시지 변경
 class Signup extends React.Component {
@@ -38,7 +38,7 @@ class Signup extends React.Component {
             <input type="submit" value="회원가입" />
           </fieldset>
         </form>
-        <Buttons links={["main", "login"]} />
+        <LinkBtns links={["main", "login"]} />
       </div>
     );
   }

@@ -42,14 +42,15 @@ class TodoWeather extends React.Component {
   }
   async componentDidMount() {
     const { latitude, longitude } = this.props.location;
+    const response = await fetch(
+      `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=33fb5c0e3003827e079f49cb15c2da51&units=metric`
+    );
     const {
       current: {
         weather: [{ icon }],
       },
       hourly,
-    } = await fetch(
-      `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=33fb5c0e3003827e079f49cb15c2da51&units=metric`
-    ).then((response) => response.json());
+    } = await response.json();
     this.setState({ currentIcon: icon, hourlyWeather: hourly });
   }
   render() {
@@ -65,46 +66,88 @@ class TodoWeather extends React.Component {
     ) : null;
   }
 }
-const WeatherForecast = async (props) => {
-  for (let i = 0; i <= 24; i += 3) {
-    const {
-      dt,
-      feels_like: feelTemp,
-      temp,
-      weather: [{ icon }],
-    } = props.hourly[i];
-    const { url } = await fetch(
-      `http://openweathermap.org/img/wn/${icon}@2x.png`
-    );
-    const now = new Date(dt * 1000);
-    const date = now.getDate();
-    const hours = now.getHours();
-    const weather = {
-      time: `${date}일 ${hours >= 10 ? hours : `0${hours}`}시`,
-      temp: `${Math.round(temp)}&deg;`,
-      feelTemp: `체감 ${Math.round(feelTemp)}&deg;`,
-    };
-    return (
-      <div className="hoursWeather" key={dt * 1000}>
-        <h6>{weather.time}</h6>
-        <img src={url} alt="weather icon" />
-        <span>{weather.temp}</span>
-        <span>{weather.feeltemp}</span>
-      </div>
-    );
+class WeatherForecast extends React.Component {
+  state = { weather: null };
+  async componentDidMount() {
+    let weathers = [];
+    for (let i = 0; i <= 24; i += 3) {
+      const {
+        dt,
+        feels_like: feelTemp,
+        temp,
+        weather: [{ icon }],
+      } = this.props.hourlyWeather[i];
+      const { url } = await fetch(
+        `http://openweathermap.org/img/wn/${icon}@2x.png`
+      );
+      const now = new Date(dt * 1000);
+      const date = now.getDate();
+      const hours = now.getHours();
+      const weather = {
+        time: `${date}일 ${hours >= 10 ? hours : `0${hours}`}시`,
+        temp: `${Math.round(temp)}\u00B0`,
+        feelTemp: `체감 ${Math.round(feelTemp)}\u00B0`,
+        url,
+        dt,
+      };
+      weathers.push(weather);
+    }
+    this.setState({ weather: weathers });
   }
-};
+  render() {
+    const { weather } = this.state;
+    return weather
+      ? weather.map((value) => {
+          const { time, temp, feelTemp, url, dt } = value;
+          return (
+            <div className="hoursWeather" key={dt * 1000}>
+              <h6>{time}</h6>
+              <img src={url} alt="weather icon" />
+              <span>{temp}</span>
+              <span>{feelTemp}</span>
+            </div>
+          );
+        })
+      : null;
+  }
+}
+// const WeatherForecast = (props) => {
+//   async function getWeatherDescription() {
+//     for (let i = 0; i <= 24; i += 3) {
+//       const {
+//         dt,
+//         feels_like: feelTemp,
+//         temp,
+//         weather: [{ icon }],
+//       } = props.hourlyWeather[i];
+//       const { url } = await fetch(
+//         `http://openweathermap.org/img/wn/${icon}@2x.png`
+//       );
+//       const now = new Date(dt * 1000);
+//       const date = now.getDate();
+//       const hours = now.getHours();
+//       const weather = {
+//         time: `${date}일 ${hours >= 10 ? hours : `0${hours}`}시`,
+//         temp: `${Math.round(temp)}&deg;`,
+//         feelTemp: `체감 ${Math.round(feelTemp)}&deg;`,
+//       };
+//       return (
+//
+//       );
+//     }
+//   }
+//   return getWeatherDescription();
+// };
+
 class CurrentWeather extends React.Component {
   state = { url: null };
   async componentDidMount() {
     const { url } = await fetch(
       `http://openweathermap.org/img/wn/${this.props.currentIcon}@2x.png`
     );
-    this.setState = { url };
-    console.log("mount");
+    this.setState({ url });
   }
   render() {
-    console.log("render");
     const { url } = this.state;
     return url ? <img src={url} alt="current weather icon" /> : null;
   }
@@ -116,6 +159,9 @@ class MainWeather extends React.Component {
   }
   async componentDidMount() {
     const { latitude, longitude } = this.props.location;
+    const response = await fetch(
+      `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=33fb5c0e3003827e079f49cb15c2da51&units=metric`
+    );
     const {
       current: {
         feels_like: feelTemp,
@@ -125,9 +171,7 @@ class MainWeather extends React.Component {
         temp,
         weather: [{ main, icon }],
       },
-    } = await fetch(
-      `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=33fb5c0e3003827e079f49cb15c2da51&units=metric`
-    ).then((response) => response.json());
+    } = await response.json();
     const { url } = await fetch(
       `http://openweathermap.org/img/wn/${icon}@2x.png`
     );
