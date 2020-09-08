@@ -3,6 +3,12 @@ import { LinkBtns } from "../components/buttons";
 import Weather from "../components/weather";
 
 class Main extends React.Component {
+  state = { id: null, list: null };
+  componentDidMount() {
+    fetch("http://localhost:3001/api")
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }
   render() {
     return (
       <div className="mainWrap">

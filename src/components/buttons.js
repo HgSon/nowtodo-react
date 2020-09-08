@@ -14,17 +14,17 @@ export const LinkBtns = (props) => {
   );
 };
 
-export function CompleteBtn() {
+export function CompleteBtn(props) {
   return (
-    <button>
-      <i className="fas fa-check" />
+    <button onClick={props.onClick}>
+      {props.isCompleted ? <i className="fas fa-check" /> : null}
     </button>
   );
 }
-export function DeleteBtn() {
+export function DeleteBtn(props) {
   return (
-    <button>
-      <i className="far fa-trash-alt" />
+    <button onClick={props.onClick}>
+      {/* <i className="far fa-trash-alt" /> */}
     </button>
   );
 }
