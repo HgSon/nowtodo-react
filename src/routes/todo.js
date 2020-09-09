@@ -1,7 +1,7 @@
 import React from "react";
 import Weather from "../components/weather";
 import { CompleteBtn, DeleteBtn } from "../components/buttons";
-import todoUpdater from "../components/todoUpdater";
+import TodoUpdater from "../components/todoUpdater";
 
 class TodoHeader extends React.Component {
   render() {
@@ -17,7 +17,7 @@ class TodoHeader extends React.Component {
 class TodoLists extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { projectList: [], isChanging: false };
+    this.state = { projectList: [] };
     this.paintProject = this.paintProject.bind(this);
     this.deleteProject = this.deleteProject.bind(this);
     this.changeProject = this.changeProject.bind(this);
@@ -26,25 +26,30 @@ class TodoLists extends React.Component {
     event.preventDefault();
     event.persist();
     const projectName = event.currentTarget.firstElementChild.value;
+    event.currentTarget.firstElementChild.value = "";
     const id = Date.now();
     this.setState((state) => ({
       projectList: state.projectList.concat({ projectName, id }),
     }));
   }
   deleteProject(event) {
-    console.log(event.currentTarget.parentNode.firstElementChild.innerHTML);
     event.persist();
-    const projectName = event.currentTarget.parentNode.firstElementChild.value;
+    const projectName =
+      event.currentTarget.parentNode.firstElementChild.innerHTML;
     const { projectList } = this.state;
     const deletedList = projectList.filter(
-      (project) => project !== projectName
+      (project) => project["projectName"] !== projectName
     );
     this.setState({ projectList: deletedList });
   }
-  changeProject(event) {
-    const project = event.currentTarget.parentNode.querySelector(".projectName")
-      .innerHTML;
-    // this.setState(state=>()) input 받아서 splice
+  changeProject(currentName, changedName) {
+    const { projectList } = this.state;
+    const updatedProjectList = projectList.slice().map((project) => {
+      if (project["projectName"] === currentName)
+        project["projectName"] = changedName;
+      return project;
+    });
+    this.setState({ projectList: updatedProjectList });
   }
   render() {
     const { projectList } = this.state;
@@ -71,13 +76,15 @@ class TodoProject extends React.Component {
   constructor(props) {
     super(props);
     this.toggleComplete = this.toggleComplete.bind(this);
-    this.toggleChange = this.toggleComplete.bind(this);
+    this.toggleChange = this.toggleChange.bind(this);
     this.saveSubTodo = this.saveSubTodo.bind(this);
     this.state = { isCompleted: false, subList: [], isChanging: false };
   }
-  toggleComplete(event) {
-    event.persist();
+  toggleComplete() {
     this.setState((state) => ({ isCompleted: !state.isCompleted }));
+  }
+  toggleChange() {
+    this.setState((state) => ({ isChanging: !state.isChanging }));
   }
   saveSubTodo(event) {
     event.preventDefault();
@@ -89,15 +96,18 @@ class TodoProject extends React.Component {
   changeSubTodo() {}
   render() {
     const { deleteProject, projectName, changeProject } = this.props;
-    const { isCompleted, subList } = this.state;
+    const { isCompleted, isChanging, subList } = this.state;
     const projectOpacity = isCompleted ? "0.4" : "1";
     return (
       <div className="subList" style={{ opacity: projectOpacity }}>
-        <h2 className="projectName" onClick={changeProject}>
-          {projectName}
-        </h2>
-        <CompleteBtn onClick={this.toggleComplete} isCompleted={isCompleted} />
-        <DeleteBtn onClick={deleteProject} />
+        <ProjectTitle
+          changeProject={changeProject}
+          isCompleted={isCompleted}
+          isChanging={isChanging}
+          deleteProject={deleteProject}
+          projectName={projectName}
+          toggleChange={this.toggleChange}
+        />
         <ul>
           {subList.map((subTodo) => (
             <SubTodoList
@@ -118,6 +128,35 @@ class TodoProject extends React.Component {
           ></input>
         </form>
       </div>
+    );
+  }
+}
+
+class ProjectTitle extends React.Component {
+  render() {
+    const {
+      isChanging,
+      isCompleted,
+      projectName,
+      toggleComplete,
+      deleteProject,
+      toggleChange,
+      changeProject,
+    } = this.props;
+    return isChanging ? (
+      <TodoUpdater
+        toggleChange={toggleChange}
+        changeTodo={changeProject}
+        projectName={projectName}
+      />
+    ) : (
+      <>
+        <h2 className="projectName" onClick={toggleChange}>
+          {projectName}
+        </h2>
+        <CompleteBtn onClick={toggleComplete} isCompleted={isCompleted} />
+        <DeleteBtn onClick={deleteProject} />
+      </>
     );
   }
 }

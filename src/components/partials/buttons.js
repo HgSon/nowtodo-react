@@ -1,5 +1,5 @@
 import React from "react";
-import routes from "../routes";
+import routes from "../../routes";
 import { Link } from "react-router-dom";
 
 export const LinkBtns = (props) => {
@@ -16,14 +16,14 @@ export const LinkBtns = (props) => {
 
 export function CompleteBtn(props) {
   return (
-    <button onClick={props.onClick}>
+    <button onClick={props.toggleComplete}>
       {props.isCompleted ? <i className="fas fa-check" /> : null}
     </button>
   );
 }
 export function DeleteBtn(props) {
   return (
-    <button onClick={props.onClick}>
+    <button onClick={props.removeList}>
       {/* <i className="far fa-trash-alt" /> */}
     </button>
   );
