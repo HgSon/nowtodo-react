@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkBtns } from "../components/buttons";
+import { LinkBtns } from "../components/partials/buttons";
 import routes from "../routes";
 
 class Login extends React.Component {

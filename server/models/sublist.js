@@ -10,5 +10,5 @@ const SublistSchema = new mongoose.Schema({
   },
 });
 
-const model = mongoose.model("sublist", SublistSchema);
+const model = mongoose.model("Sublist", SublistSchema);
 export default model;

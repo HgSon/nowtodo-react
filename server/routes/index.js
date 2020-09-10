@@ -1,10 +1,12 @@
 import express from "express";
-import { testDB, test } from "../db";
-
+import { getSignup, postSignup, test } from "../controller/controllers";
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send(test);
-});
+router.post("/", test);
+// router.get("/project", getUsersProjects);
+// router.post("/project", postUsersProjects);
+router.get("/signup", getSignup);
+router.post("/signup", postSignup);
+// router.post("/login", postLogin);
 
-module.exports = router;
+export default router;

@@ -22,8 +22,12 @@ export function CompleteBtn(props) {
   );
 }
 export function DeleteBtn(props) {
+  function handleClick() {
+    const target = props.removeTarget.current.innerHTML;
+    props.removeList(target);
+  }
   return (
-    <button onClick={props.removeList}>
+    <button onClick={handleClick}>
       {/* <i className="far fa-trash-alt" /> */}
     </button>
   );

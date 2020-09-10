@@ -8,6 +8,7 @@ class TodoSublist extends React.Component {
     this.toggleComplete = this.toggleComplete.bind(this);
     this.toggleChange = this.toggleChange.bind(this);
     this.state = { isCompleted: false, isChanging: false };
+    this.removeTarget = React.createRef();
   }
   toggleComplete() {
     this.setState((state) => ({ isCompleted: !state.isCompleted }));
@@ -25,16 +26,18 @@ class TodoSublist extends React.Component {
           toggleComplete={this.toggleComplete}
           isCompleted={isCompleted}
         />
-        <DeleteBtn removeList={removeList} />
+        <DeleteBtn removeList={removeList} removeTarget={this.removeTarget} />
         {isChanging ? (
           <TodoUpdater
             toggleChange={this.toggleChange}
             changeTodo={changeList}
+            currentName={title}
           />
         ) : (
           <span
             style={{ opacity: listOpacity, cursor: "pointer" }}
-            onClick={changeList}
+            onClick={this.toggleChange}
+            ref={this.removeTarget}
           >
             {title}
           </span>

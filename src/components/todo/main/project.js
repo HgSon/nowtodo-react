@@ -8,6 +8,7 @@ class ProjectList extends React.Component {
     this.toggleComplete = this.toggleComplete.bind(this);
     this.toggleChange = this.toggleChange.bind(this);
     this.state = { isCompleted: false, isChanging: false };
+    this.removeTarget = React.createRef();
   }
   toggleComplete() {
     this.setState((state) => ({ isCompleted: !state.isCompleted }));
@@ -16,8 +17,8 @@ class ProjectList extends React.Component {
     this.setState((state) => ({ isChanging: !state.isChanging }));
   }
   render() {
-    const { title, removeList, changeList } = this.props;
-    const { isCompleted, isChanging } = this.props;
+    const { title, removeList, changeList, removeTarget } = this.props;
+    const { isCompleted, isChanging } = this.state;
     const projectOpacity = isCompleted ? "0.4" : "1";
     return (
       <div style={{ opacity: projectOpacity }}>
@@ -29,12 +30,21 @@ class ProjectList extends React.Component {
           />
         ) : (
           <>
-            <h1 onClick={this.toggleChange}>{title}</h1>
+            <h1
+              ref={this.removeTarget}
+              style={{ cursor: "pointer" }}
+              onClick={this.toggleChange}
+            >
+              {title}
+            </h1>
             <CompleteBtn
               toggleComplete={this.toggleComplete}
               isCompleted={isCompleted}
             />
-            <DeleteBtn removeList={removeList} />
+            <DeleteBtn
+              removeList={removeList}
+              removeTarget={this.removeTarget}
+            />
           </>
         )}
         <TodoContainer isSublist={true} />

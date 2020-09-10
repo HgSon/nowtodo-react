@@ -5,10 +5,6 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     required: "Title is required",
   },
-  id: {
-    type: Number,
-    required: true,
-  },
   user: {
     type: String,
     required: true,
@@ -24,5 +20,5 @@ const ProjectSchema = new mongoose.Schema({
   ],
 });
 
-const model = mongoose.model("project", ProjectSchema);
+const model = mongoose.model("Project", ProjectSchema);
 export default model;

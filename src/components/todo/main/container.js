@@ -20,12 +20,11 @@ class TodoContainer extends React.Component {
       list: state.list.concat({ title, id }),
     }));
   }
-  removeList(event) {
-    event.persist();
-    const title = event.currentTarget.parentNode.querySelector(".contents")
-      .innerHTML;
+  removeList(removeTarget) {
     const { list } = this.state;
-    const removedList = list.filter((project) => project["title"] !== title);
+    const removedList = list.filter(
+      (project) => project["title"] !== removeTarget
+    );
     this.setState({ list: removedList });
   }
   changeList(currentTitle, changedTitle) {
@@ -35,6 +34,19 @@ class TodoContainer extends React.Component {
       return todo;
     });
     this.setState({ list: updatedList });
+  }
+  async componentDidMount() {
+    // const dbList = !this.props.isSublist
+    //   ? await fetch("http://localhost:3001/api/project")
+    //   : await fetch("http://localhost:3001/api/sublist");
+    // res.json()
+    console.log("mount");
+  }
+  async componentDidUpdate() {
+    console.log("update");
+    // const dbList
+    //if dblist !== list
+    //post list
   }
   render() {
     const { list } = this.state;
