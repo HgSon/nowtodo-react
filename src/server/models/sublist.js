@@ -7,6 +7,7 @@ const SublistSchema = new mongoose.Schema({
   },
   completed: {
     type: Boolean,
+    default: false,
   },
 });
 

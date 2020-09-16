@@ -1,12 +1,12 @@
 import React from "react";
-import routes from "../../routes";
+import { clientRoutes } from "../../../routes";
 import { Link } from "react-router-dom";
 
 export const LinkBtns = (props) => {
   return (
     <div>
       {props.links.map((link) => (
-        <Link key={link} to={routes[link]}>
+        <Link key={link} to={clientRoutes[link]}>
           {link}
         </Link>
       ))}

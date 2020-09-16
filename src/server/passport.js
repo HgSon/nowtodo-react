@@ -1,5 +1,5 @@
 import passport from "passport";
-import User from "./server/models/User";
+import User from "./models/user";
 
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());

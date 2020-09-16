@@ -1,6 +1,7 @@
 import React from "react";
 import TodoUpdater from "../../partials/todoUpdater";
 import { CompleteBtn, DeleteBtn } from "../../partials/buttons";
+import SublistContainer from "./sublistContainer";
 import TodoContainer from "./container";
 class ProjectList extends React.Component {
   constructor(props) {
@@ -16,8 +17,10 @@ class ProjectList extends React.Component {
   toggleChange() {
     this.setState((state) => ({ isChanging: !state.isChanging }));
   }
+  componentDidUpdate() {}
+  componentDidMount() {}
   render() {
-    const { title, removeList, changeList, removeTarget } = this.props;
+    const { title, removeList, changeList } = this.props;
     const { isCompleted, isChanging } = this.state;
     const projectOpacity = isCompleted ? "0.4" : "1";
     return (
@@ -47,7 +50,8 @@ class ProjectList extends React.Component {
             />
           </>
         )}
-        <TodoContainer isSublist={true} />
+        <SublistContainer />
+        {/* <TodoContainer isSublist={true} /> */}
       </div>
     );
   }

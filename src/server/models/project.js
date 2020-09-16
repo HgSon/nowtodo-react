@@ -5,12 +5,17 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     required: "Title is required",
   },
+  id: {
+    type: Number,
+    required: true,
+  },
   user: {
     type: String,
     required: true,
   },
   complated: {
     type: Boolean,
+    default: false,
   },
   sublist: [
     {

@@ -1,6 +1,7 @@
 import React from "react";
-import ProjectList from "./project";
-import TodoSublist from "./sublist";
+import { serverRoutes } from "../../../../routes";
+import ProjectList from "./projectPresenter";
+import TodoSublist from "./sublistPresenter";
 
 class TodoContainer extends React.Component {
   constructor(props) {
@@ -35,21 +36,26 @@ class TodoContainer extends React.Component {
     });
     this.setState({ list: updatedList });
   }
-  async componentDidMount() {
-    // const dbList = !this.props.isSublist
-    //   ? await fetch("http://localhost:3001/api/project")
-    //   : await fetch("http://localhost:3001/api/sublist");
-    // res.json()
-    console.log("mount");
+  componentDidMount() {
+    const url = `http://localhost:3001/api${serverRoutes.project}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => console.log(res));
+    //   // .then()
+    //   // .then((list) => this.setState({ list }))
+    //   // .then(() => this.state.list);
   }
   async componentDidUpdate() {
-    console.log("update");
-    // const dbList
-    //if dblist !== list
-    //post list
+    const { list } = this.state;
+    console.log(this.state.list);
+    // const path =
+    // const url = !this.props.isSublist
+    // ? "http://localhost:3001/project";
+    // console.log(list);
   }
   render() {
     const { list } = this.state;
+    console.log("list", list);
     if (!this.props.isSublist) {
       return (
         <main>

@@ -1,24 +1,24 @@
 import React from "react";
 import { LinkBtns } from "../components/partials/buttons";
 import { Link } from "react-router-dom";
+import { serverRoutes } from "../../routes";
 
-// 아이디 겹치는경우, 비밀번호 일치하지 않는 경우 label hidden false,  메시지 변경
 class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.ref = React.createRef();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleRedirect = this.handleRedirect.bind(this);
     this.state = {
       userName: "",
       password: "",
       pwConfirm: "",
-      idError: "",
-      currentUser: null,
+      currentError: "",
+      currentUser: "",
     };
   }
   handleChange(event) {
+    event.persist();
     const userInfo = event.currentTarget.name;
     const infoValue = event.currentTarget.value;
     this.setState({ [userInfo]: infoValue });
@@ -30,7 +30,7 @@ class Signup extends React.Component {
     if (user.password !== user.pwConfirm) {
       return;
     }
-    const url = "http://localhost:3001/api/signup";
+    const url = `http://localhost:3001/api${serverRoutes.signup}`;
     await fetch(url, {
       method: "POST",
       body: JSON.stringify(user),
@@ -41,22 +41,18 @@ class Signup extends React.Component {
       .then((res) => res.json())
       .then((res) => this.setState(res));
   }
-  handleRedirect() {
-    this.ref.click();
+  componentDidUpdate() {
+    if (this.state.currentUser) {
+      this.ref.current.click();
+    }
   }
   render() {
-    const { password, pwConfirm, idError, currentUser } = this.state;
+    const { password, pwConfirm, currentError, currentUser } = this.state;
     const confirmMessage =
       password === pwConfirm ? "" : "비밀번호가 일치하지 않습니다";
-    if (currentUser) {
-      this.handleRedirect();
-    }
     return (
       <div>
-        <Link
-          to={{ pathname: "/todo", state: { currentUser } }}
-          ref={this.ref}
-        />
+        <Link ref={this.ref} to={{ pathname: `/todo/${currentUser}` }} />
         <form onSubmit={this.handleSubmit}>
           <fieldset>
             <legend>회원정보를 입력해주세요</legend>
@@ -67,8 +63,8 @@ class Signup extends React.Component {
               type="text"
               placeholder="아이디"
             />
-            <label htmlFor="userName" hidden={!idError}>
-              {idError || "아이디"}
+            <label htmlFor="userName" hidden={!currentError}>
+              {currentError || "아이디"}
             </label>
             <input
               onChange={this.handleChange}
