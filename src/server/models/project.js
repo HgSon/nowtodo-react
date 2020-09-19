@@ -13,14 +13,14 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  complated: {
+  completed: {
     type: Boolean,
     default: false,
   },
   sublist: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "sublist",
+      ref: "Sublist",
     },
   ],
 });

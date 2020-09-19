@@ -4,10 +4,10 @@ const TodoUpdater = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     event.persist();
-    const { toggleChange, changeTodo, currentName } = props;
+    const { toggleChange, changeTodo, target } = props;
     const changedName = event.currentTarget.firstElementChild.value;
     toggleChange();
-    changeTodo(currentName, changedName);
+    changeTodo(target, changedName);
     event.currentTarget.firstElementChild.value = "";
   }
   return (

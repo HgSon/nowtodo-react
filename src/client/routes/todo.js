@@ -1,54 +1,35 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Weather from "../components/partials/weather";
-import TodoContainer from "../components/todo/main/container";
-import ProjectContainer from "../components/todo/main/projectContainer";
-
-class TodoHeader extends React.Component {
-  render() {
-    return (
-      <header>
-        <Weather isTodo={true} />
-        {/* <ChangeID /> */}
-        <ChangeViewMode />
-        <Logout currentUser={this.props.currentUser} />
-      </header>
-    );
-  }
-}
-function Logout(props) {
-  // let currentUser = props.cu
-  // const handleClick = () => {
-  //   currentUser = "";
-  // };
-  return (
-    <button>
-      <Link to="/">Logout</Link>
-    </button>
-  );
-}
-function ChangeViewMode() {
-  // css 변경
-  return null;
-}
-class ChangeID extends React.Component {
-  // db불러오기 -> 저장한 ID만 목록에 -> 선택 -> 로그인 -> todo 재랜더
-  render() {
-    return null;
-  }
-}
+import TodoHeader from "../components/todo/todoHeader";
+import ProjectContainer from "../components/todo/projectContainer";
 
 class Todo extends React.Component {
-  state = {
-    currentUser: this.props.location.pathname.split("/todo/")[1],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: this.props.location.pathname.split("/todo/")[1],
+      mode: "day",
+    };
+    this.changeUser = this.changeUser.bind(this);
+    this.changeMode = this.changeMode.bind(this);
+  }
+  changeUser(user) {
+    this.props.location.pathname = `/todo/${user}`;
+    this.setState({ currentUser: user });
+  }
+  changeMode(selectedMode) {
+    this.setState({ mode: selectedMode });
+  }
   render() {
-    console.log(this.state.currentUser);
+    const { currentUser } = this.state;
+    // console.log(this.state.mode); //두번 눌리는 이유
     return (
       <div className="todoWrap">
-        <TodoHeader currentUser={this.state.currentUser} />
-        <ProjectContainer currentUser={this.state.currentUser} />
-        {/* <TodoContainer isSublist={false} currentUser={this.state.currentUser} /> */}
+        <TodoHeader
+          currentUser={currentUser}
+          changeUser={this.changeUser}
+          changeMode={this.changeMode}
+        />
+        <ProjectContainer currentUser={currentUser} />
       </div>
     );
   }

@@ -5,6 +5,12 @@ import {
   patchProjectList,
   postProjectList,
   getProjectList,
+  deleteProjectList,
+  getSubList,
+  postSubList,
+  patchSubList,
+  deleteSubList,
+  getUserList,
 } from "../controller/controllers";
 import { serverRoutes } from "../../routes";
 import "../passport";
@@ -15,12 +21,16 @@ router.post(serverRoutes.signup, postSignup);
 router.post(serverRoutes.login, postLogin, (req, res) =>
   res.send({ currentUser: req.body.userName })
 );
+
 router.get(serverRoutes.project, getProjectList);
 router.post(serverRoutes.project, postProjectList);
-router.patch(serverRoutes.project, patchProjectList);
+router.patch(`${serverRoutes.project}/:projectId`, patchProjectList);
+router.delete(`${serverRoutes.project}/:projectId`, deleteProjectList);
 
-// router.get(serverRoutes.project, getList);
-// router.get(serverRoutes.sublist, getList);
-// router.patch(serverRoutes.sublist, patchList);
+router.get(serverRoutes.sublist, getSubList);
+router.post(serverRoutes.sublist, postSubList);
+router.patch(`${serverRoutes.sublist}/:sublistId`, patchSubList);
+router.delete(`${serverRoutes.sublist}/:sublistId`, deleteSubList);
 
+router.get(serverRoutes.users, getUserList);
 export default router;

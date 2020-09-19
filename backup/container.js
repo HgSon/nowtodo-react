@@ -1,7 +1,7 @@
 import React from "react";
-import { serverRoutes } from "../../../../routes";
-import ProjectList from "./projectPresenter";
-import TodoSublist from "./sublistPresenter";
+import { serverRoutes } from "../src/routes";
+import ProjectList from "../src/client/components/todo/main/projectPresenter";
+import TodoSublist from "../src/client/components/todo/main/sublistPresenter";
 
 class TodoContainer extends React.Component {
   constructor(props) {

@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
 const SublistSchema = new mongoose.Schema({
-  content: {
+  title: {
     type: String,
-    required: "contents is required",
+    required: "title is required",
+  },
+  id: {
+    type: Number,
+    required: true,
   },
   completed: {
     type: Boolean,

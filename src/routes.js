@@ -2,11 +2,9 @@ const MAIN = "/";
 const LOGIN = "/login";
 const SIGNUP = "/signup";
 const TODO = "/todo";
-const USER = "/:user";
-// const PROJECT = "/project";
-// const SUBLIST = "/sublist";
+const USERS = "/users";
 const PROJECT = "/:user/projects";
-const SUBLIST = "/:user/sublists";
+const SUBLIST = "/:projectId/sublists";
 
 export const clientRoutes = {
   main: MAIN,
@@ -20,5 +18,5 @@ export const serverRoutes = {
   signup: SIGNUP,
   project: PROJECT,
   sublist: SUBLIST,
-  user: USER,
+  users: USERS,
 };

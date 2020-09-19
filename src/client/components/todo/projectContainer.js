@@ -1,5 +1,4 @@
 import React from "react";
-import { serverRoutes } from "../../../../routes";
 import ProjectList from "./projectPresenter";
 
 class ProjectContainer extends React.Component {
@@ -14,6 +13,16 @@ class ProjectContainer extends React.Component {
     this.changeList = this.changeList.bind(this);
     this.saveList = this.saveList.bind(this);
     this.deleteList = this.deleteList.bind(this);
+    this.changeTitle = this.changeTitle.bind(this);
+  }
+  async componentDidUpdate() {
+    const prevUser = this.state.url.split("/")[4];
+    if (this.props.currentUser !== prevUser) {
+      const url = `http://localhost:3001/api/${this.props.currentUser}/projects`;
+      const response = await fetch(url);
+      const list = await response.json();
+      this.setState({ url, list });
+    }
   }
   paintList(event) {
     event.preventDefault();
@@ -21,15 +30,16 @@ class ProjectContainer extends React.Component {
     const title = event.currentTarget.firstElementChild.value;
     event.currentTarget.firstElementChild.value = "";
     const id = Date.now();
+    const completed = false;
     this.setState((state) => ({
-      list: state.list.concat({ title, id }),
+      list: state.list.concat({ title, id, completed }),
     }));
-    this.saveList({ title, id });
+    this.saveList({ title, id, completed });
   }
-  saveList({ title, id }) {
+  saveList({ title, id, completed }) {
     fetch(this.state.url, {
       method: "POST",
-      body: JSON.stringify({ title, id }),
+      body: JSON.stringify({ title, id, completed }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -39,33 +49,37 @@ class ProjectContainer extends React.Component {
   removeList(removeTarget) {
     const { list } = this.state;
     const removedList = list.filter(
-      (project) => project["title"] !== removeTarget
+      (project) => project["id"] !== removeTarget
     );
     this.setState({ list: removedList });
     this.deleteList(removeTarget);
   }
   deleteList(removeTarget) {
-    fetch(this.state.url, { method: "DELETE" });
+    fetch(`${this.state.url}/${removeTarget}`, { method: "DELETE" });
   }
-  changeList(currentTitle, changedTitle) {
+  changeList(target, changedTitle) {
     const { list } = this.state;
     const updatedList = list.slice().map((todo) => {
-      if (todo["title"] === currentTitle) todo["title"] = changedTitle;
+      if (todo["id"] === target) todo["title"] = changedTitle;
       return todo;
     });
     this.setState({ list: updatedList });
-    this.changeTitle(currentTitle, changedTitle);
+    this.changeTitle(target, changedTitle);
   }
-  changeTitle(currentTitle, changedTitle) {
-    fetch(this.state.url, { method: "PATCH" });
+  changeTitle(targetId, changedTitle) {
+    fetch(`${this.state.url}/${targetId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ targetId, changedTitle }),
+    });
   }
   componentDidMount() {
     fetch(this.state.url)
       .then((res) => res.json())
-      .then((list) => this.setState({ list }))
-      .then(() => console.log("list", this.state.list));
+      .then((list) => this.setState({ list }));
   }
-
   render() {
     const { list } = this.state;
     return (
@@ -77,8 +91,11 @@ class ProjectContainer extends React.Component {
           <ProjectList
             title={todo.title}
             key={todo.id}
+            id={todo.id}
+            completed={todo.completed}
             removeList={this.removeList}
             changeList={this.changeList}
+            currentUser={this.props.currentUser}
           />
         ))}
       </main>
