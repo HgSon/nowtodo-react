@@ -6,22 +6,46 @@ import Main from "./client/routes/main";
 import Login from "./client/routes/login";
 import Signup from "./client/routes/signup";
 import { clientRoutes } from "./routes";
+import { ThemeProvider } from "styled-components";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path={clientRoutes.login} component={Login} />
-        <Route path={clientRoutes.signup} component={Signup} />
-        <Route path={`${clientRoutes.todo}/:id`} component={Todo} />
-        <Route path={clientRoutes.main} component={Main} />
-        <Redirect path="*" to={clientRoutes.main} />
-      </Switch>
-    </BrowserRouter>
+    <ThemeProvider
+      theme={{
+        day: {
+          paper: "#ffffff",
+          back: "#fafafa",
+          main: "#2196f3",
+          light: "#64b5f6",
+          dark: "#1976d2",
+          secondary: "#dc004e",
+          secondaryLight: "#e33371",
+          secondaryDark: "#9a0036",
+          text: "rgba(0, 0, 0, 0.87)",
+          textDisabled: "rgba(0, 0, 0, 0.38)",
+        },
+        night: {
+          back: "#303030",
+          paper: "#424242",
+          light: "#6e6e6e",
+          main: "#515151",
+          dark: "#404040",
+          text: "#ffffff",
+          textDisabled: "rgba(255, 255, 255, 0.5)",
+        },
+      }}
+    >
+      <BrowserRouter>
+        <Switch>
+          <Route path={clientRoutes.login} component={Login} />
+          <Route path={clientRoutes.signup} component={Signup} />
+          <Route path={`${clientRoutes.todo}/:id`} component={Todo} />
+          <Route path={clientRoutes.main} component={Main} />
+          <Redirect path="*" to={clientRoutes.main} />
+        </Switch>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
-// state = {currentUser: ""}
-// login, signup에 currentuser넘기고 currentuser 있으면 todo/currentuser ?
-// signup, login에서 link click()말고 redirect바로 쓸수있나?
 export default App;

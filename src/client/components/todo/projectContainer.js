@@ -1,5 +1,55 @@
 import React from "react";
 import ProjectList from "./projectPresenter";
+import styled, { css } from "styled-components";
+import { MdAddBox } from "react-icons/md";
+const Main = styled.main`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 10%;
+  min-height: calc(100vh - 50px);
+  ${(props) => {
+    const { mode, theme } = props;
+    return css`
+      color: ${theme[mode].text};
+      background: ${theme[mode].back};
+    `;
+  }}
+`;
+const Form = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const InputText = styled.input`
+  all: unset;
+  caret-color: transparent;
+  border-bottom: 0.1em dashed;
+  padding: 0 10px;
+  font-size: 14px;
+  font-style: italic;
+  // background: rgba(0, 0, 0, 0.03);
+  // background: rgba(255, 255, 255, 0.3);
+  ${(props) => {
+    const { mode, theme } = props;
+    return css`
+      color: ${theme[mode].textDisabled};
+      // background: ${theme[mode].textDisabled};
+      border-color: ${theme[mode].textDisabled};
+    `;
+  }};
+`;
+const InputButton = styled.button`
+  all: unset;
+  font-size: 20px;
+  position: relative;
+  left: 5px;
+  ${(props) => {
+    const { mode, theme } = props;
+    return css`
+      color: ${theme[mode].main};
+    `;
+  }};
+`;
 
 class ProjectContainer extends React.Component {
   constructor(props) {
@@ -82,11 +132,15 @@ class ProjectContainer extends React.Component {
   }
   render() {
     const { list } = this.state;
+    const { currentUser, mode, theme } = this.props;
     return (
-      <main>
-        <form onSubmit={this.paintList}>
-          <input type="text" placeholder="새 프로젝트" />
-        </form>
+      <Main theme={theme} mode={mode}>
+        <Form onSubmit={this.paintList}>
+          <InputText type="text" mode={mode} placeholder="할일 추가하기" />
+          <InputButton mode={mode}>
+            <MdAddBox />
+          </InputButton>
+        </Form>
         {list.map((todo) => (
           <ProjectList
             title={todo.title}
@@ -95,10 +149,11 @@ class ProjectContainer extends React.Component {
             completed={todo.completed}
             removeList={this.removeList}
             changeList={this.changeList}
-            currentUser={this.props.currentUser}
+            currentUser={currentUser}
+            mode={mode}
           />
         ))}
-      </main>
+      </Main>
     );
   }
 }

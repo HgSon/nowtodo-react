@@ -1,36 +1,58 @@
 import React from "react";
 import TodoHeader from "../components/todo/todoHeader";
 import ProjectContainer from "../components/todo/projectContainer";
+import styled from "styled-components";
+
+const TodoWrap = styled.div`
+  margin: 0;
+  padding: 0;
+  & a {
+    text-decoration: none;
+  }
+  & ul {
+    margin: 0;
+    padding: 0;
+  }
+  & li {
+    list-style: none;
+  }
+`;
 
 class Todo extends React.Component {
   constructor(props) {
     super(props);
+    const {
+      match: {
+        params: { id },
+      },
+      location: { state },
+    } = this.props;
     this.state = {
-      currentUser: this.props.location.pathname.split("/todo/")[1],
-      mode: "day",
+      currentUser: id,
+      mode: (state && state.mode) || "day",
     };
     this.changeUser = this.changeUser.bind(this);
     this.changeMode = this.changeMode.bind(this);
   }
   changeUser(user) {
-    this.props.location.pathname = `/todo/${user}`;
+    this.props.history.replace(user);
     this.setState({ currentUser: user });
   }
   changeMode(selectedMode) {
     this.setState({ mode: selectedMode });
   }
   render() {
-    const { currentUser } = this.state;
-    // console.log(this.state.mode); //두번 눌리는 이유
+    const { currentUser, mode } = this.state;
     return (
-      <div className="todoWrap">
+      <TodoWrap mode={mode}>
         <TodoHeader
           currentUser={currentUser}
           changeUser={this.changeUser}
           changeMode={this.changeMode}
+          mode={mode}
         />
-        <ProjectContainer currentUser={currentUser} />
-      </div>
+        <ProjectContainer currentUser={currentUser} mode={mode} />
+      </TodoWrap>
     );
   }
 }

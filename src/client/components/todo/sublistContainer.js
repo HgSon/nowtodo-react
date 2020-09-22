@@ -1,6 +1,23 @@
 import React from "react";
 import TodoSublist from "./sublistPresenter";
-
+import styled, { css } from "styled-components";
+const InputText = styled.input`
+  all: unset;
+  caret-color: transparent;
+  // border-bottom: 0.1em dashed;
+  padding: 0 10px 0 0;
+  font-size: 12px;
+  font-style: italic;
+  width: 100%;
+  ${(props) => {
+    const { mode, theme } = props;
+    return css`
+      color: ${theme[mode].textDisabled};
+      // background: ${theme[mode].back};
+      // border-color: ${theme[mode].back};
+    `;
+  }};
+`;
 class SublistContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -84,11 +101,12 @@ class SublistContainer extends React.Component {
               deleteList={this.deleteList}
               url={url}
               completed={todo.completed}
+              mode={this.props.mode}
             />
           ))}
         </ul>
-        <form onSubmit={this.paintList}>
-          <input type="text" placeholder="새 할일" />
+        <form style={{ width: "70%" }} onSubmit={this.paintList}>
+          <InputText type="text" placeholder=">" mode={this.props.mode} />
         </form>
       </>
     );
