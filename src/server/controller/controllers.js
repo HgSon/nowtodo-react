@@ -25,7 +25,7 @@ export const postLogin = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (info && info.message === "Password or username is incorrect") {
       res.status(401).send({
-        currentError: "존재하지 않는 아이디이거나 비밀번호가 일치하지 않습니다",
+        currentError: "아이디 또는 비밀번호가 일치하지 않습니다",
       });
     }
     if (!err && user && !info) {

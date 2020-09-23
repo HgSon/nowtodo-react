@@ -2,7 +2,7 @@ import React from "react";
 import { LinkBtns } from "../components/partials/buttons";
 import Weather from "../components/partials/weather/weather";
 import styled, { css } from "styled-components";
-import ChangeViewMode from "../components/partials/changeViewMode";
+import ChangeViewMode from "../components/partials/header/changeViewMode";
 
 const MainpageWrap = styled.div`
   width: 100%;
@@ -20,16 +20,19 @@ const MainpageWrap = styled.div`
         `;
   }}
   display: grid;
-  grid-template-columns: 1fr 400px 1fr;
+  grid-template-columns: 1fr 300px 1fr;
   grid-template-rows: 25% 1fr 30%;
   & > div:first-child {
     position: absolute;
+    right: 5%;
+    top: 20px;
   }
   & > main {
     grid-column: 2/3;
     grid-row: 2/3;
   }
 `;
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -51,7 +54,7 @@ class Main extends React.Component {
         <ChangeViewMode mode={mode} changeMode={this.changeMode} />
         <main>
           <Weather isTodo={false} />
-          <LinkBtns links={["signup", "login"]} />
+          <LinkBtns mode={mode} width={"250px"} links={["signup", "login"]} />
         </main>
       </MainpageWrap>
     );

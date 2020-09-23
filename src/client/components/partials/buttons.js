@@ -31,15 +31,65 @@ const TodoBtn = styled.button`
     `;
   }}
 `;
+const BtnBox = styled.div`
+  margin: 0 auto;
+  ${(props) => {
+    const { mode, theme, width, minWidth, maxWidth } = props;
+    const color = {
+      day: {
+        text: theme[mode].paper,
+        back: [theme[mode].secondaryLight, theme[mode].dark, theme[mode].light],
+      },
+      night: {
+        text: theme[mode].text,
+        back: [theme[mode].light, theme[mode].dark, theme[mode].main],
+      },
+    };
+    return css`
+      width: ${width};
+      min-width: ${minWidth || width};
+      max-width: ${maxWidth || width};
+      & a {
+        color: ${color[mode].text};
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        text-align: center;
+        font-size: 14px;
+        height: 25px;
+        line-height: 25px;
+        margin-bottom: 8px;
+      }
+      .signup {
+        background: ${color[mode].back[0]};
+      }
+      .login {
+        background: ${color[mode].back[1]};
+      }
+      .main {
+        background: ${color[mode].back[2]};
+      }
+    `;
+  }}
+`;
 export const LinkBtns = (props) => {
   return (
-    <div>
+    <BtnBox
+      mode={props.mode}
+      width={props.width}
+      minWidth={props.minWidth}
+      maxWidth={props.maxWidth}
+    >
       {props.links.map((link) => (
-        <Link key={link} to={clientRoutes[link]}>
+        <Link
+          key={link}
+          className={link}
+          to={{ pathname: clientRoutes[link], state: { mode: props.mode } }}
+        >
           {link}
         </Link>
       ))}
-    </div>
+    </BtnBox>
   );
 };
 

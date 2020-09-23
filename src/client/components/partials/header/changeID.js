@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { serverRoutes } from "../../../routes";
+import { serverRoutes } from "../../../../routes";
 
 const IDBox = styled.div`
   width: 65px;

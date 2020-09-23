@@ -6,6 +6,11 @@ const ModeBtnBox = styled.div`
   width: 52px;
   height: 20px;
   grid-template-columns: repeat(2, 1fr);
+  ${(props) =>
+    !props.currentUser &&
+    css`
+      margin-right: 10%;
+    `}
 `;
 
 const ModeButton = styled.button`
@@ -40,13 +45,13 @@ const ModeButton = styled.button`
         `;
   }};
 `;
-function ChangeViewMode({ changeMode, ...rest }) {
+function ChangeViewMode({ changeMode, currentUser, ...rest }) {
   function handleClick(event) {
     event.persist();
     changeMode(event.currentTarget.id);
   }
   return (
-    <ModeBtnBox>
+    <ModeBtnBox currentUser={currentUser}>
       <ModeButton day id="day" {...rest} onClick={handleClick}>
         day
       </ModeButton>

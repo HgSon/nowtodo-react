@@ -14,7 +14,7 @@ const ClockBox = styled.div`
   margin: 0 auto;
   display: flex;
   width: 100%;
-  height: 100px;
+  height: 80px;
   // background: red;
   flex-direction: column;
   align-items: center;
@@ -30,8 +30,8 @@ const TimeSpan = styled.span`
 const DescBox = styled.div`
   display: grid;
   width: 100%;
-  height: 200px;
-  grid-template-columns: 200px 1fr 1fr;
+  height: 100px;
+  grid-template-columns: 100px 1fr 1fr;
   grid-template-rows: repeat(7,1fr)
   position: relative;
   & img {
@@ -76,7 +76,7 @@ class MainWeather extends React.Component {
       },
     } = await response.json();
     const { url } = await fetch(
-      `http://openweathermap.org/img/wn/${icon}@4x.png`
+      `http://openweathermap.org/img/wn/${icon}@2x.png`
     );
     const weather = {
       url,

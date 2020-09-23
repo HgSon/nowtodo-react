@@ -1,27 +1,97 @@
 import React from "react";
 import { LinkBtns } from "../components/partials/buttons";
-import { Link } from "react-router-dom";
 import { serverRoutes } from "../../routes";
+import styled, { css } from "styled-components";
+import Header from "../components/partials/header/header";
+
+const SignupWrap = styled.div`
+  ${(props) => {
+    const { theme, mode } = props;
+    return css`
+      width: 100%;
+      height: 100vh;
+      background: ${theme[mode].back};
+      & main {
+        width: 80%;
+        min-width: 400px;
+        max-width: 800px;
+        background: ${theme[mode].paper};
+        padding: 15px;
+        position: relative;
+        top: 50%;
+        margin: -179px auto 0 auto;
+      }
+      & h1 {
+        font-size: 16px;
+        text-align: center;
+        color: ${theme[mode].textDisabled};
+      }
+      & form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      & input {
+        all: unset;
+        width: 35vw;
+        min-width: 200px;
+        max-width: 700px;
+        height: 25px;
+        margin-bottom: 5px;
+        font-size: 10px;
+        color: ${theme[mode].text};
+      }
+      & #submit {
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: ${mode === "day" ? theme[mode].main : theme[mode].text};
+        box-sizing: border-box;
+        border: 2px solid
+          ${mode === "day" ? theme[mode].main : theme[mode].text};
+        margin-bottom: 25px;
+      }
+      & label {
+        font-size: 8px;
+        font-style: italic;
+        font-weight: bold;
+        color: ${mode === "day" ? theme[mode].secondary : theme[mode].text};
+        margin-bottom: 5px;
+      }
+    `;
+  }}
+`;
 
 class Signup extends React.Component {
   constructor(props) {
     super(props);
-    this.ref = React.createRef();
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    const {
+      location: { state },
+    } = this.props;
     this.state = {
       userName: "",
       password: "",
       pwConfirm: "",
       currentError: "",
       currentUser: "",
+      mode: (state && state.mode) || "day",
     };
+    this.ref = React.createRef();
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.changeMode = this.changeMode.bind(this);
+  }
+  changeMode(selectedMode) {
+    this.setState({ mode: selectedMode });
   }
   handleChange(event) {
     event.persist();
     const userInfo = event.currentTarget.name;
     const infoValue = event.currentTarget.value;
     this.setState({ [userInfo]: infoValue });
+    if (userInfo === "userName") {
+      this.setState({ currentError: "" });
+    }
   }
   async handleSubmit(event) {
     event.persist();
@@ -42,20 +112,24 @@ class Signup extends React.Component {
       .then((res) => this.setState(res));
   }
   componentDidUpdate() {
-    if (this.state.currentUser) {
-      this.ref.current.click();
+    const { currentUser, mode } = this.state;
+    if (currentUser) {
+      this.props.history.push({
+        pathname: `/todo/${currentUser}`,
+        state: { mode },
+      });
     }
   }
   render() {
-    const { password, pwConfirm, currentError, currentUser } = this.state;
+    const { password, pwConfirm, currentError, mode } = this.state;
     const confirmMessage =
       password === pwConfirm ? "" : "비밀번호가 일치하지 않습니다";
     return (
-      <div>
-        <Link ref={this.ref} to={{ pathname: `/todo/${currentUser}` }} />
-        <form onSubmit={this.handleSubmit}>
-          <fieldset>
-            <legend>회원정보를 입력해주세요</legend>
+      <SignupWrap mode={mode}>
+        <Header changeMode={this.changeMode} mode={mode} />
+        <main>
+          <form onSubmit={this.handleSubmit}>
+            <h1>Sign up</h1>
             <input
               onChange={this.handleChange}
               name="userName"
@@ -84,11 +158,17 @@ class Signup extends React.Component {
               placeholder="비밀번호 확인"
             />
             <label htmlFor="pwConfirm">{confirmMessage}</label>
-            <input type="submit" value="회원가입" />
-          </fieldset>
-        </form>
-        <LinkBtns links={["main", "login"]} />
-      </div>
+            <input id="submit" type="submit" value="회원가입" />
+          </form>
+          <LinkBtns
+            width="35vw"
+            minWidth="200px"
+            maxWidth="700px"
+            mode={mode}
+            links={["main", "login"]}
+          />
+        </main>
+      </SignupWrap>
     );
   }
 }

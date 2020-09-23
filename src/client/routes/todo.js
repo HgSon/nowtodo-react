@@ -1,5 +1,5 @@
 import React from "react";
-import TodoHeader from "../components/todo/todoHeader";
+import Header from "../components/partials/header/header";
 import ProjectContainer from "../components/todo/projectContainer";
 import styled from "styled-components";
 
@@ -45,7 +45,7 @@ class Todo extends React.Component {
     const { currentUser, mode } = this.state;
     return (
       <TodoWrap mode={mode}>
-        <TodoHeader
+        <Header
           currentUser={currentUser}
           changeUser={this.changeUser}
           changeMode={this.changeMode}
